@@ -1,5 +1,5 @@
-(1,(Moderate,20,Some(Right))),(2,(Mild,6,None)),(3,(Crowded,75,Some(Right))),(4,(Empty,4,None)),(5,(Mild,8,Some(Left)))
-(1,(Crowded,70,Some(Right))),(2,(Moderate,15,Some(Right))),(3,(Empty,3,None)),(4,(Crowded,60,Some(Left))),(5,(Crowded,67,Some(Left)))
-(1,(Empty,1,None)),(2,(Moderate,12,Some(Left))),(3,(Crowded,50,Some(Right))),(4,(Moderate,25,Some(Right))),(5,(Empty,4,None))
-(1,(Crowded,80,Some(Right))),(2,(Crowded,73,Some(Right))),(3,(Crowded,60,None)),(4,(Crowded,95,Some(Right))),(5,(Crowded,65,None))
-(1,(Mild,8,None)),(2,(Crowded,73,Some(Right))),(3,(Crowded,60,None)),(4,(Crowded,95,Some(Right))),(5,(Mild,5,None))
+Some(Right), None, Some(Right), None, Some(Left)
+Some(Right), Some(Right), None, Some(Left), Some(Left)
+None, Some(Left), Some(Right), Some(Right), None
+Some(Right), Some(Right), None, Some(Right), None
+None, Some(Right), None, Some(Right), None

@@ -85,14 +85,17 @@ object SubwayCarRouting {
 
     val trains = readFile(inputFilePath)
     val recommendations = trains.map { passengersList =>
-      val routingRecommendation = generateRoutingRecommendations(passengersList).toSeq.sortBy(_._1)
-      val resultStr = routingRecommendation.map {
+      val routingRecommendations = generateRoutingRecommendations(passengersList).toSeq.sortBy(_._1)
+
+      val resultStr = routingRecommendations.map {
         case (carriage, (congestion, numberOfPeople, direction)) =>
           s"Carriage_$carriage: congestion level $congestion, number of people $numberOfPeople, direction suggestion ${direction.getOrElse("None")}"
       }.mkString("\n ")
       println(resultStr)
-      routingRecommendation.mkString(",")
+      routingRecommendations.map{ case (carriage, (congestion, numberOfPeople, direction)) => direction} .mkString(", ")
     }
+
+
 
     writeFile(recommendations, outputFilePath)
     println("Routing recommendations have been successfully written to the output file.")
