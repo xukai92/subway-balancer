@@ -1,0 +1,1 @@
+Some(Right), None, Some(Right), None, Some(Left)
