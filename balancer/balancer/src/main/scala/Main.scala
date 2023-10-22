@@ -1,80 +1,138 @@
-object Main {
+// Algorithm Description:
+//
+// Input: List of Integers, simulating train carriages and passenger counts inside.
+// For example, if the size of the List is 20, it means simulating a subway train with 20 carriages,
+// and the list represents the number of passengers in each carriage.
+// For instance, List(1) = 10 means carriage 1 has 10 passengers.
+// ---------------------------------------------
+// The goal is to generate recommendations for passengers based on the crowding level of the carriages
+// to help them quickly find empty carriages.
+// Algorithm: Routing Algorithm
+// ---------------------------------------------
+// Output:
+//
+// (1) Current crowding level of each carriage, where
+//  Empty (fewer than 5 passengers) represented as "000",
+//  Free (5 - 10 passengers) represented as "100",
+//  Moderate (10 - 30 passengers) represented as "110",
+//  Crowded (30+ passengers) as "111"
+// (2) Direction indication: If crowded, display the direction passengers should go (Some(Left / Right)),
+// otherwise, display None.
+// For example: If the leftmost carriage is crowded, it should always display Some(Right).
+// For example:
+// If the 10th carriage is crowded, the 11th carriage is free, the 9th carriage is crowded,
+// and the 8th carriage is free, then the 10th carriage should display Some(Right),
+// and the 8th carriage should display None.
+// A complete output is a map, with instruction examples like:
+// 10th carriage -> "111", Some(Right).
 
-  // Algorithm Description:
-  //
-  // Input: List of Integers, simulating train carriages and passenger counts inside.
+object SubwayCarRouting {
 
-  // For example, if the size of the List is 20, it means simulating a subway train with 20 carriages,
-  // and the list represents the number of passengers in each carriage.
-  // For instance, List(1) = 10 means carriage 1 has 10 passengers.
+  import scala.io.Source
 
-  // ---------------------------------------------
+  import scala.io.Source
+  import java.io._
 
-  // The goal is to generate recommendations for passengers based on the crowding level of the carriages
-  // to help them quickly find empty carriages.
+  /**
+   * Reads the subway car passenger data from a file.
+   *
+   * @param filePath Path to the input file.
+   * @return List of lists of passenger counts for each train.
+   */
+  def readFile(filePath: String): List[List[Int]] = {
+    val bufferedSource = Source.fromFile(filePath)
+    val data = bufferedSource.getLines.map { line =>
+      line.split(",").map(_.trim.toInt).toList
+    }.toList
+    bufferedSource.close()
+    data
+  }
 
-  // Algorithm: Routing Algorithm
+  /**
+   * Writes the routing recommendations to an output file.
+   *
+   * @param data     List of strings representing the recommendations for each train.
+   * @param filePath Path to the output file.
+   */
+  def writeFile(data: List[String], filePath: String): Unit = {
+    val pw = new PrintWriter(new File(filePath))
+    data.foreach(pw.println)
+    pw.close()
+  }
 
-  // ---------------------------------------------
+  /**
+   * The main function that reads the passenger data, generates routing recommendations,
+   * and writes the recommendations to an output file.
+   *
+   * @param args Command line arguments.
+   */
+  def main(args: Array[String]): Unit = {
+    val inputFilePath = "C:\\Users\\57557\\Documents\\Project\\subway-balancer\\balancer\\balancer\\src\\main\\scala\\input"
+    val outputFilePath = "C:\\Users\\57557\\Documents\\Project\\subway-balancer\\balancer\\balancer\\src\\main\\scala\\output"
 
-  // Output:
-  //
-  // (1) Current crowding level of each carriage, where
-  //  Empty (fewer than 5 passengers) represented as "000",
-  //  Free (5 - 10 passengers) represented as "100",
-  //  Moderate (10 - 30 passengers) represented as "110",
-  //  Crowded (30+ passengers) as "111"
-
-  // (2) Direction indication: If crowded, display the direction passengers should go (Some(Left / Right)),
-  // otherwise, display None.
-
-  // For example: If the leftmost carriage is crowded, it should always display Some(Right).
-  // For example:
-  // If the 10th carriage is crowded, the 11th carriage is free, the 9th carriage is crowded,
-  // and the 8th carriage is free, then the 10th carriage should display Some(Right),
-  // and the 8th carriage should display None.
-
-  // A complete output is a map, with instruction examples like:
-  // 10th carriage -> "111", Some(Right).
-
-  object SubwayCarRouting {
-
-    def main(args: Array[String]): Unit = {
-      val passengersList = List(20, 6, 35, 4, 8, 70, 15, 3, 60, 7, 1, 12, 50, 25, 4, 9, 30, 60, 5, 15)
-      val routingRecommendation = generateRoutingRecommendations(passengersList)
-      println(routingRecommendation)
+    val trains = readFile(inputFilePath)
+    val recommendations = trains.map { passengersList =>
+      val routingRecommendation = generateRoutingRecommendations(passengersList).toSeq.sortBy(_._1)
+      val resultStr = routingRecommendation.map {
+        case (carriage, (congestion, numberOfPeople, direction)) =>
+          s"Carriage_$carriage: congestion level $congestion, number of people $numberOfPeople, direction suggestion ${direction.getOrElse("None")}"
+      }.mkString("\n ")
+      println(resultStr)
+      routingRecommendation.mkString(",")
     }
 
-    def generateRoutingRecommendations(passengersList: List[Int]): Map[Int, (String, Option[String])] = {
-      passengersList.zipWithIndex.map {
-        case (passengers, index) =>
-          val congestionLevel = getCongestionLevel(passengers)
-          val direction = getDirection(passengersList, index, passengers)
-          (index + 1) -> (congestionLevel, direction)
-      }.toMap
-    }
+    writeFile(recommendations, outputFilePath)
+    println("Routing recommendations have been successfully written to the output file.")
+  }
 
-    def getCongestionLevel(passengers: Int): String = passengers match {
-      case p if p < 5  => "000"
-      case p if p < 10 => "100"
-      case p if p < 30 => "110"
-      case _ => "111"
 
-    }
+  def generateRoutingRecommendations(passengersList: List[Int]): Map[Int, (String, Int, Option[String])] = {
+    passengersList.zipWithIndex.map { case (passengers, index) => val congestionLevel = getCongestionLevel(passengers)
+      val direction = getDirection(passengersList, index, passengers)
+      (index + 1) -> (congestionLevel, passengers, direction)
+    }.toMap
+  }
 
-    def getDirection(passengersList: List[Int], index: Int, passengers: Int): Option[String] = {
-      if (passengers >= 60) {
-        if (index == 0) Some("Right")
-        else if (index == passengersList.length - 1) Some("Left")
-        else {
-          val leftCar = passengersList(index - 1)
-          val rightCar = passengersList(index + 1)
-          if (leftCar >= 60 && rightCar >= 60) None
-          else if (leftCar < rightCar) Some("Left")
-          else Some("Right")
-        }
-      } else None
+  def getCongestionLevel(passengers: Int): String = passengers match {
+    case p if p < 5 => "Empty"
+    case p if p < 10 => "Mild"
+    case p if p < 30 => "Moderate"
+    case _ => "Crowded"
+  }
+
+  /**
+   * Determines the direction recommendation for passengers in a subway car.
+   *
+   * @param passengersList List of passenger counts in each subway car.
+   * @param index          Index of the current subway car (0-based).
+   * @param passengers     Count of passengers in the current subway car.
+   * @return Optional direction recommendation: Some("Left"), Some("Right"), or None.
+   *         Returns None if the current car is not crowded or if all cars are crowded.
+   */
+  def getDirection(passengersList: List[Int], index: Int, passengers: Int): Option[String] = {
+    // Check if all cars are crowded
+    if (passengersList.forall(_ >= 60)) return None
+
+    // If the current car is not crowded, return None
+    if (passengers < 60) return None
+
+    // Find the nearest non-crowded car on the left
+    val leftIndex = (index - 1 to 0 by -1).find(passengersList(_) < 60)
+    // Find the nearest non-crowded car on the right
+    val rightIndex = (index + 1 until passengersList.length).find(passengersList(_) < 60)
+
+    // Determine the direction based on the positions of the nearest non-crowded cars
+    (leftIndex, rightIndex) match {
+      case (None, None) => None // If all adjacent cars are crowded, return None
+      case (Some(l), None) => Some("Left") // If only the left side has a non-crowded car, recommend Left
+      case (None, Some(r)) => Some("Right") // If only the right side has a non-crowded car, recommend Right
+      case (Some(l), Some(r)) =>
+        // If both sides have non-crowded cars, recommend the direction to the nearest one
+        if ((index - l) < (r - index)) Some("Left")
+        else Some("Right")
     }
   }
 
+
 }
+
