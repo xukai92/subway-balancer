@@ -26,6 +26,7 @@
 // A complete output is a map, with instruction examples like:
 // 10th carriage -> "111", Some(Right).
 
+// java -cp balancer.jar  SubwayCarRouting --input "C:\\Users\\57557\\Documents\\Project\\subway-balancer\\balancer\\balancer\\src\\main\\scala\\input" --output "C:\\Users\\57557\\Documents\\Project\\subway-balancer\\balancer\\balancer\\src\\main\\scala\\output"
 object SubwayCarRouting {
 
   import scala.io.Source
