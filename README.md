@@ -1,4 +1,4 @@
-# NYC AI#Hackathon: AI for Public Good NY
+# NYC AI Hackathon: AI for Public Good NY
 
 ## Subway-balancer
 Balancing Trains for New York City Subway Systems
