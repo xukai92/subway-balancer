@@ -1,0 +1,5 @@
+/Users/kai/src/nyc-ai-hackathon/subway-balancer/counter/data/subway-1.jpeg
+/Users/kai/src/nyc-ai-hackathon/subway-balancer/counter/data/subway-2.jpeg
+/Users/kai/src/nyc-ai-hackathon/subway-balancer/counter/data/subway-3.jpeg
+/Users/kai/src/nyc-ai-hackathon/subway-balancer/counter/data/subway-4.jpeg
+/Users/kai/src/nyc-ai-hackathon/subway-balancer/counter/data/subway-5.jpeg
