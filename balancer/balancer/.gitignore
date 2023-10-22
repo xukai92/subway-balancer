@@ -1,0 +1,38 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# IntelliJ IDEA
+.idea/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# SBT
+.target/
+lib_managed/
+project/target/
+project/boot/
+target/
+
+# Mac OS
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Compiled files
+*.class
+
+# Temporary files
+*.swp
+*~
+
+# Environment file
+.env
+
+# Dependency directories
+.ivy2/
+coursier/
