@@ -67,8 +67,20 @@ object SubwayCarRouting {
    * @param args Command line arguments.
    */
   def main(args: Array[String]): Unit = {
-    val inputFilePath = "C:\\Users\\57557\\Documents\\Project\\subway-balancer\\balancer\\balancer\\src\\main\\scala\\input"
-    val outputFilePath = "C:\\Users\\57557\\Documents\\Project\\subway-balancer\\balancer\\balancer\\src\\main\\scala\\output"
+
+    val argsMap = args.sliding(2, 2).toList.collect {
+      case Array(flag, value) => flag -> value
+    }.toMap
+
+    val inputFilePath = argsMap.getOrElse("--input", {
+      println("Usage: --input <input-file-path>")
+      sys.exit(1)
+    })
+
+    val outputFilePath = argsMap.getOrElse("--output", {
+      println("Usage: --output <output-file-path>")
+      sys.exit(1)
+    })
 
     val trains = readFile(inputFilePath)
     val recommendations = trains.map { passengersList =>
